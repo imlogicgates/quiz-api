@@ -2,59 +2,20 @@ import { Hono } from "hono";
 import { handle } from "hono/aws-lambda";
 import { quizQuestions } from "./data";
 import {
-  Answer,
   GradeRequest,
   GradeResponse,
   GradeResult,
   QuizQuestion,
 } from "./types";
+import { getRandomQuestions, isAnswerCorrect } from "./utils";
 
 const app = new Hono();
 
-// Helper function to get random questions
-function getRandomQuestions(count: number = 10): QuizQuestion[] {
-  const shuffled = [...quizQuestions].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, Math.min(count, quizQuestions.length));
-}
-
-// Helper function to validate answer
-function isAnswerCorrect(question: QuizQuestion, answer: Answer): boolean {
-  if (question.type === "text") {
-    return (
-      question.correctText?.toLowerCase().trim() ===
-      String(answer.value).toLowerCase().trim()
-    );
-  }
-
-  if (question.type === "radio") {
-    return question.correctIndex === answer.value;
-  }
-
-  if (question.type === "checkbox") {
-    const correctIndexes = question.correctIndexes || [];
-    const answerIndexes = Array.isArray(answer.value)
-      ? answer.value
-      : [answer.value];
-
-    if (correctIndexes.length !== answerIndexes.length) {
-      return false;
-    }
-
-    return correctIndexes.every((index: number) =>
-      answerIndexes.includes(index)
-    );
-  }
-
-  return false;
-}
-
-// GET /api/quiz endpoint
 app.get("/api/quiz", (c) => {
   try {
     const questions = getRandomQuestions();
 
-    // Remove correct answers from response
-    const questionsForClient = questions.map((q) => {
+    const questionsForClient = questions.map((q: QuizQuestion) => {
       const { correctIndex, correctIndexes, correctText, ...question } = q;
       return question;
     });
@@ -66,12 +27,10 @@ app.get("/api/quiz", (c) => {
   }
 });
 
-// POST /api/grade endpoint
 app.post("/api/grade", async (c) => {
   try {
     const body = (await c.req.json()) as GradeRequest;
 
-    // Validate request body
     if (!body.answers || !Array.isArray(body.answers)) {
       return c.json(
         { error: "Invalid payload: answers must be an array" },
@@ -86,7 +45,6 @@ app.post("/api/grade", async (c) => {
       );
     }
 
-    // Validate each answer
     for (const answer of body.answers) {
       if (!answer.id || answer.value === undefined || answer.value === null) {
         return c.json(
@@ -96,7 +54,6 @@ app.post("/api/grade", async (c) => {
       }
     }
 
-    // Grade the answers
     const results: GradeResult[] = [];
     let correctCount = 0;
 
@@ -139,7 +96,6 @@ app.post("/api/grade", async (c) => {
   }
 });
 
-// Health check endpoint
 app.get("/", (c) => {
   return c.text("Quiz API is running!");
 });
