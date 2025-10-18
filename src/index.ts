@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { handle } from "hono/aws-lambda";
 
-// Type definitions
 interface QuizQuestion {
   id: string | number;
   type: "text" | "checkbox" | "radio";
@@ -34,7 +33,6 @@ interface GradeResponse {
 
 const app = new Hono();
 
-// Sample quiz data
 const quizQuestions: QuizQuestion[] = [
   {
     id: 1,
