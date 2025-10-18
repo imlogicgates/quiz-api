@@ -1,4 +1,4 @@
-interface QuizQuestion {
+export interface QuizQuestion {
   id: string | number;
   type: "text" | "checkbox" | "radio";
   question: string;
@@ -8,24 +8,22 @@ interface QuizQuestion {
   correctText?: string;
 }
 
-interface Answer {
+export interface Answer {
   id: string | number;
   value: string | number | number[];
 }
 
-interface GradeRequest {
+export interface GradeRequest {
   answers: Answer[];
 }
 
-interface GradeResult {
+export interface GradeResult {
   id: string | number;
   correct: boolean;
 }
 
-interface GradeResponse {
+export interface GradeResponse {
   score: number;
   total: number;
   results: GradeResult[];
 }
-
-export type { Answer, GradeRequest, GradeResponse, GradeResult, QuizQuestion };

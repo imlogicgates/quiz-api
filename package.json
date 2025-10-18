@@ -8,6 +8,7 @@
     "deploy": "run-s build zip update"
   },
   "devDependencies": {
+    "@types/node": "^24.8.1",
     "esbuild": "^0.25.11",
     "npm-run-all2": "^6.2.0"
   },

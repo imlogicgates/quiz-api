@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { handle } from "hono/aws-lambda";
+import { quizQuestions } from "./data";
 import {
   Answer,
   GradeRequest,
@@ -9,114 +10,6 @@ import {
 } from "./types";
 
 const app = new Hono();
-
-const quizQuestions: QuizQuestion[] = [
-  {
-    id: 1,
-    type: "radio",
-    question: "What is the capital of France?",
-    choices: ["London", "Berlin", "Paris", "Madrid"],
-    correctIndex: 2,
-  },
-  {
-    id: 2,
-    type: "checkbox",
-    question: "Which of the following are programming languages?",
-    choices: ["JavaScript", "HTML", "Python", "CSS"],
-    correctIndexes: [0, 2],
-  },
-  {
-    id: 3,
-    type: "text",
-    question: "What is 2 + 2?",
-    correctText: "4",
-  },
-  {
-    id: 4,
-    type: "radio",
-    question: "Which planet is closest to the Sun?",
-    choices: ["Venus", "Mercury", "Earth", "Mars"],
-    correctIndex: 1,
-  },
-  {
-    id: 5,
-    type: "checkbox",
-    question: "Which are primary colors?",
-    choices: ["Red", "Green", "Blue", "Yellow"],
-    correctIndexes: [0, 2, 3],
-  },
-  {
-    id: 6,
-    type: "text",
-    question: "What is the largest mammal in the world?",
-    correctText: "blue whale",
-  },
-  {
-    id: 7,
-    type: "radio",
-    question: "Who painted the Mona Lisa?",
-    choices: [
-      "Vincent van Gogh",
-      "Pablo Picasso",
-      "Leonardo da Vinci",
-      "Michelangelo",
-    ],
-    correctIndex: 2,
-  },
-  {
-    id: 8,
-    type: "checkbox",
-    question: "Which are continents?",
-    choices: ["Asia", "Europe", "Antarctica", "Greenland"],
-    correctIndexes: [0, 1, 2],
-  },
-  {
-    id: 9,
-    type: "text",
-    question: "What is the chemical symbol for gold?",
-    correctText: "Au",
-  },
-  {
-    id: 10,
-    type: "radio",
-    question: "What is the smallest country in the world?",
-    choices: ["Monaco", "Vatican City", "Liechtenstein", "San Marino"],
-    correctIndex: 1,
-  },
-  {
-    id: 11,
-    type: "checkbox",
-    question: "Which are renewable energy sources?",
-    choices: ["Solar", "Coal", "Wind", "Nuclear"],
-    correctIndexes: [0, 2],
-  },
-  {
-    id: 12,
-    type: "text",
-    question: "What year did World War II end?",
-    correctText: "1945",
-  },
-  {
-    id: 13,
-    type: "radio",
-    question: "What is the largest ocean on Earth?",
-    choices: ["Atlantic", "Indian", "Pacific", "Arctic"],
-    correctIndex: 2,
-  },
-  {
-    id: 14,
-    type: "checkbox",
-    question: "Which are programming paradigms?",
-    choices: ["Object-Oriented", "Functional", "Procedural", "HTML"],
-    correctIndexes: [0, 1, 2],
-  },
-  {
-    id: 15,
-    type: "text",
-    question: "What is the speed of light in vacuum?",
-    correctText: "299792458",
-  },
-];
 
 // Helper function to get random questions
 function getRandomQuestions(count: number = 10): QuizQuestion[] {
