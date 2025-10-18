@@ -1,35 +1,12 @@
 import { Hono } from "hono";
 import { handle } from "hono/aws-lambda";
-
-interface QuizQuestion {
-  id: string | number;
-  type: "text" | "checkbox" | "radio";
-  question: string;
-  choices?: string[];
-  correctIndex?: number;
-  correctIndexes?: number[];
-  correctText?: string;
-}
-
-interface Answer {
-  id: string | number;
-  value: string | number | number[];
-}
-
-interface GradeRequest {
-  answers: Answer[];
-}
-
-interface GradeResult {
-  id: string | number;
-  correct: boolean;
-}
-
-interface GradeResponse {
-  score: number;
-  total: number;
-  results: GradeResult[];
-}
+import {
+  Answer,
+  GradeRequest,
+  GradeResponse,
+  GradeResult,
+  QuizQuestion,
+} from "./types";
 
 const app = new Hono();
 
@@ -170,7 +147,9 @@ function isAnswerCorrect(question: QuizQuestion, answer: Answer): boolean {
       return false;
     }
 
-    return correctIndexes.every((index) => answerIndexes.includes(index));
+    return correctIndexes.every((index: number) =>
+      answerIndexes.includes(index)
+    );
   }
 
   return false;
