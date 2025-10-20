@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { handle } from "hono/aws-lambda";
+import { cors } from "hono/cors";
 import { quizQuestions } from "./data";
 import {
   GradeRequest,
@@ -10,6 +11,16 @@ import {
 import { getRandomQuestions, isAnswerCorrect } from "./utils";
 
 const app = new Hono();
+
+// Add CORS middleware
+app.use(
+  "*",
+  cors({
+    origin: ["https://quiz-web-gules.vercel.app/", "http://localhost:3000"],
+    allowMethods: ["GET", "POST", "OPTIONS"],
+    allowHeaders: ["Content-Type"],
+  })
+);
 
 app.get("/api/quiz", (c) => {
   try {
