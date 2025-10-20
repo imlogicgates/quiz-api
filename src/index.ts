@@ -16,7 +16,7 @@ const app = new Hono();
 app.use(
   "*",
   cors({
-    origin: ["https://quiz-web-gules.vercel.app/", "http://localhost:3000"],
+    origin: ["https://quiz-web-gules.vercel.app", "http://localhost:3000"],
     allowMethods: ["GET", "POST", "OPTIONS"],
     allowHeaders: ["Content-Type"],
   })
